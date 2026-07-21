@@ -1,14 +1,25 @@
 package id.herald.springStart.Controller;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import id.herald.springStart.Model.UserTable;
+import id.herald.springStart.Repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+
+import java.util.List;
+
 
 @Controller // Handles HTTP requests : GET,POST
 public class MappingClass {
-    @GetMapping
+
+    @Autowired
+    private UserRepository uRepo;
+
+    @GetMapping("/")
     public String openFirstPage(){
         return "firstPage.html";
     }
@@ -24,18 +35,20 @@ public class MappingClass {
     }
 
     @PostMapping("/loginPage")
-    public String loginPost(HttpServletRequest request){
+    public String loginPost(HttpServletRequest request,Model m){
         String username=request.getParameter("username");
         String password=request.getParameter("password");
 
         System.out.println(username);
         System.out.println(password);
 
-        if(username.equals("admin") && password.equals("admin")){
-            return "home.html";
-        }else{
-            return  "loginPage.html";
-        }
-    }
+        String hashPassword= DigestUtils.md5DigestAsHex(password.getBytes());
 
+        if(uRepo.existsByUsernameAndPassword(username,hashPassword)){
+            List<UserTable> totalUsers=uRepo.findAll();
+            m.addAttribute("totalUsers",totalUsers);
+            return "home.html";
+        }
+        return  "loginPage.html";
+    }
 }
