@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
-</head>
-<body>
-<form method="post" action="loginPage">
-    <h1>Login here</h1>
-    <label>UserName :
-    <input type="text" name="username">
-    </label>
-    <br><br>
-    <label>Password :
-    <input type="password" name="password">
-    </label>
-    <br>
-    <input type="submit" value="Login">
-</form>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Login Page</title>
+    </head>
+    <body>
+        <h1>Login here</h1>
+        <hr>
+        <span th:text="${signupSuccess}" style="color:green"></span>
+        <form method="post" action="/loginPage">
+            UserName : <input type="text" name="username"><br><br>
+
+            Password : <input type="password" name="password"><br><br>
+
+            <input type="submit" value="Login">
+        </form>
+    </body>
 </html>

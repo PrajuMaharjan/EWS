@@ -30,12 +30,7 @@ public class SignUpController {
         System.out.println("password: " + password);
 
         String hashPassword= DigestUtils.md5DigestAsHex(password.getBytes());
-
-        m.addAttribute("signupSuccess","You have successfully signed up! Login now!");
-
-        if(uRepo.existsByUsernameAndPassword(username,hashPassword)){
-            return "signupPage";
-        }
+        
         UserTable uc = new UserTable();
         uc.setUsername(username);
         uc.setPassword(hashPassword);

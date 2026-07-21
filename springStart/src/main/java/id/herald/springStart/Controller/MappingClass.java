@@ -1,6 +1,7 @@
 package id.herald.springStart.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,8 +48,25 @@ public class MappingClass {
         if(uRepo.existsByUsernameAndPassword(username,hashPassword)){
             List<UserTable> totalUsers=uRepo.findAll();
             m.addAttribute("totalUsers",totalUsers);
+
+            HttpSession session=request.getSession();
+            session.setAttribute("username",username);
             return "home.html";
         }
         return  "loginPage.html";
+    }
+
+    @GetMapping("/home")
+    public String getHome(Model m){
+        m.addAttribute("totalUsers",uRepo.findAll());
+        return "home";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session=request.getSession();
+        session.invalidate();
+
+        return "loginPage";
     }
 }
